@@ -4,6 +4,7 @@
 Scripts extract promoter regions and search for given motifs inside those promoters.
 
 1. System requirements
+
 	Windows
 	All software dependencies and operating systems (including version numbers)
 	Python 3.9.6
@@ -13,14 +14,17 @@ Scripts extract promoter regions and search for given motifs inside those promot
 	None
 
 2. Installation guide
+
 	2.1 install biopython by running the following command in the command line: pip install biopython
 	2.2 install pandas by running the following command in the command line: pip install pandas
 
 
 3. Instructions for use
+
 	3.1 Install python, biopython, and pandas
 	
 	3.2 Download :
+	
 		All files from this GitHub
 		Tomato genome from "https://ftp.ensemblgenomes.ebi.ac.uk/pub/plants/release-55/fasta/solanum_lycopersicum/dna/Solanum_lycopersicum.SL3.0.dna_sm.toplevel.fa.gz"
 			after downloading unzip the file
@@ -50,12 +54,15 @@ Scripts extract promoter regions and search for given motifs inside those promot
 	3.6 Run script "extract_promoters_script.py" in "Extract promoter region" directory. Provide responses for inputs. 
 	
 	3.7 Results:
+	
 		All generated files will be in the directory "Extract promoter region\output" 
 		# at this point, all desirable promoters are extracted 
 	
 	
 	3.8 Copy files for screening from "Extract promoter region\output" to "motif_check\input"
+	
 	3.9 Provide all motif sequences 5'->3' in file "motif_check\motifs to check.xlsx" colomn "Motif seq" and name of the transcription factor in column "Name of TF"
+	
 	3.10 Run script "motif_check_script.py" in "motif_check" directory. Provide responses for inputs.  
 	
 	3.11 Results 
