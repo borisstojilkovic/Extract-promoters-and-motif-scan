@@ -32,9 +32,10 @@ Scripts extract promoter regions and search for given motifs inside those promot
 			after downloading unzip the file
 			
 	3.3 Make directories: 
-		Extract promoter region\Genome_and_annotation
-		Extract promoter region\input
-		motif_check\input
+	
+		"Extract promoter region\Genome_and_annotation"
+		"Extract promoter region\input"
+		"motif_check\input"
 
 	3.4 Place files in the correct directories:
 	
