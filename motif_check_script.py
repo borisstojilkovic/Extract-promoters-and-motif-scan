@@ -5,6 +5,7 @@ import os # import os for file and directory handling
 import time # import time for measuring the run time of the script
 import itertools # import itertools for combinations generation
 import re # import re for string manipulation
+import scipy.stats as stats
 
 # create a list of DNA letters that are ambiguous and can be represented by "N" in the input motifs
 listA=["N", "R", "Y", "K", "M", "S", "W", "B", "D", "H", "V"]
@@ -119,6 +120,29 @@ for t1 in list_input:
     df_poition_of_motifs.to_excel(f"output/{RC}{TF_name[TF]}_{t1}/{TF_name[TF]}_{t1}.xlsx", index=False) #save to excel
     #df_ratio=df_ratio.drop('a', axis=1)
     df_ratio=df_ratio.T
+    df_ratio=df_ratio.rename(columns={0: 'Percentage', 1: f'Number of Promoters containing {TF_name[TF]} site', 2: "Total number of genes"})
+    #############################
+    #calculte statistics
+    max = int(df_ratio["Total number of genes"].max()) #max_total_number_of_genes
+    g_in_max=int(df_ratio.loc[df_ratio['Total number of genes'] == max, f'Number of Promoters containing {TF_name[TF]} site'].iloc[0]) #number of genes in max_total_number_of_genes with BS
+    p_values=[]
+    Odds_ratio=[]
+    for index, row in df_ratio.iterrows():
+        GFI=int(row[f'Number of Promoters containing {TF_name[TF]} site']) #gene of interest
+        GOS=int(row['Total number of genes']) #total genes in sample usually DEGs
+        # Create a contingency table with the counts of genes that have or do not have the binding site in their promoter regions
+        # For example, if you have a set of 100 DEGs and 5000 genes in the genome, and the binding site is present in the promoter regions of 20 DEGs and 200 genes in the rest of the genome, the table would look like this:
+        #contingency_table = pd.DataFrame({'Has binding site': [20, 200], 'Does not have binding site': [80, 4800]}, index=['DEGs', 'Non-DEGs'])
+        # Perform Fisher's exact test on the contingency table
+        contingency_table = pd.DataFrame({'Has binding site': [GFI, g_in_max], 'Does not have binding site': [GOS-GFI, max-g_in_max]}, index=['DEGs', 'Non-DEGs'])
+        
+        oddsratio, pvalue = stats.fisher_exact(contingency_table)
+        p_values.append(pvalue)
+        Odds_ratio.append(oddsratio)
+    
+    df_ratio["p_values"] = p_values
+    df_ratio["oddsratio"]= Odds_ratio
+    #############################
     df_ratio.to_excel(f"output/{RC}{TF_name[TF]}_{t1}_percentage.xlsx") #save to excel
     TF+=1 # increment the counter for the current TF
     print(f"done {t1}")
