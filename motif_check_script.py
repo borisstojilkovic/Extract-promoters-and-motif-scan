@@ -6,7 +6,7 @@ import time # import time for measuring the run time of the script
 import itertools # import itertools for combinations generation
 import re # import re for string manipulation
 import scipy.stats as stats
-
+import sys
 # create a list of DNA letters that are ambiguous and can be represented by "N" in the input motifs
 listA=["N", "R", "Y", "K", "M", "S", "W", "B", "D", "H", "V"]
 
@@ -15,7 +15,7 @@ lattersDF= pd.read_excel("latters.xlsx")
 # start measuring the run time of the script
 start_time = time.time()
 # prompt the user for whether to search on the upper or both strands of DNA
-RC= input("Do you wnt to search on the bottom strand aslo (UB) or only on upper (U)?")
+RC= input("Do you wnt to search on the bottom (B), both bottom and upper (UB) or only on upper (U)?")
 # read in the list of DNA motifs from an Excel file
 motifsDF= pd.read_excel("motifs to check.xlsx")  
 list_input=motifsDF["Motif seq"].tolist()
@@ -59,8 +59,13 @@ for t1 in list_input:
                     total_genes+=1 # increment the total number of DNA sequences
                     if RC=="UB": # check if the search is being done on both strands or just the upper strand
                         s = seq.seq.upper() + " " +seq.seq.reverse_complement().upper()# # if both strands, concatenate the upper strand with the reverse complement of the lower strand
-                    else: # if only the upper strand, just use the upper strand
+                    elif RC=="B":
+                        s=seq.seq.reverse_complement().upper()
+                    elif RC=="U": # if only the upper strand, just use the upper strand
                         s = seq.seq.upper()
+                    else:
+                        print("You entered wrong input strand try again")
+                        sys.exit()    
                     times_present=0 # initialize a counter for the number of times the current motif is present in the current DNA sequence
                     #check if "N "is in the input motif t1 # check if the current motif contains any ambiguous DNA letters
                     list_L=[]
